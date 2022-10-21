@@ -41,13 +41,4 @@ public class Collisions : MonoBehaviour
             Physics2D.IgnoreCollision(collision.gameObject.GetComponent<Collider2D>(), GetComponent<Collider2D>());
         }
     }
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Environment"))
-        {
-            //player.transform.position = (((player.transform.position + transform.position) / 2) - (transform.position / 4));
-            //playerBody.AddForce(new Vector2(0f, 1f), ForceMode2D.Impulse);
-        }
-        
-    }
 }
