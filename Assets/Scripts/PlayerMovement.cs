@@ -42,11 +42,11 @@ public class PlayerMovement : MonoBehaviour
         } else 
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
-            playerBody.velocity = new Vector2(-speed / 1.25f, playerBody.velocity.y);
+            playerBody.velocity = new Vector2(-speed / 1.15f, playerBody.velocity.y);
         } else 
         if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
-            playerBody.velocity = new Vector2(speed / 1.25f, playerBody.velocity.y);
+            playerBody.velocity = new Vector2(speed / 1.15f, playerBody.velocity.y);
         }
     }
     private void OnCollisionEnter2D(Collision2D collision)
