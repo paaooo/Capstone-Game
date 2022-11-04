@@ -10,8 +10,8 @@ using static UnityEngine.GraphicsBuffer;
 public class MouseInteractions : MonoBehaviour
 {
     Transform player;
-    public float maxPos;
-    public float thrustPos;
+    [SerializeField] float maxPos;
+    [SerializeField] float thrustPos;
     // Start is called before the first frame update
     void Start()
     {
