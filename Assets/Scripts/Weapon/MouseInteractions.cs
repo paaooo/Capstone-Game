@@ -11,7 +11,6 @@ public class MouseInteractions : MonoBehaviour
 {
     Transform player;
     [SerializeField] float maxPos;
-    [SerializeField] float thrustPos;
     // Start is called before the first frame update
     void Start()
     {
@@ -38,35 +37,25 @@ public class MouseInteractions : MonoBehaviour
         Vector3 playerPos = player.position;
         Vector3 maxPosition = mousePos; // modifying this later to be close to player position
         // limits distance from player
-        if (mousePos[0] > playerPos.x + thrust()) // max X positive
+        if (mousePos[0] > playerPos.x + maxPos) // max X positive
         {
-            maxPosition[0] = playerPos.x + thrust();
+            maxPosition[0] = playerPos.x + maxPos;
             transform.position = maxPosition;
         }
-        if (mousePos[0] < playerPos.x - thrust()) // max X negative
+        if (mousePos[0] < playerPos.x - maxPos) // max X negative
         {
-            maxPosition[0] = playerPos.x - thrust();
+            maxPosition[0] = playerPos.x - maxPos;
             transform.position = maxPosition;
         }
-        if (mousePos[1] > playerPos.y + thrust()) // max Y positive
+        if (mousePos[1] > playerPos.y + maxPos) // max Y positive
         {
-            maxPosition[1] = playerPos.y + thrust();
+            maxPosition[1] = playerPos.y + maxPos;
             transform.position = maxPosition;
         }
-        if (mousePos[1] < playerPos.y - thrust()) // max Y negative
+        if (mousePos[1] < playerPos.y - maxPos) // max Y negative
         {
-            maxPosition[1] = playerPos.y - thrust();
+            maxPosition[1] = playerPos.y - maxPos;
             transform.position = maxPosition;
         }
-    }
-    // Thrust function asks if mouse button 1 is held down
-    // If it is, maxPosition of weapon from player is increased
-    float thrust()
-    {
-        if(Input.GetMouseButton(0))
-        {
-            return thrustPos;
-        }
-        return maxPos;
     }
 }

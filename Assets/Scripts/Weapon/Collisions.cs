@@ -8,7 +8,7 @@ public class Collisions : MonoBehaviour
     Rigidbody2D playerBody;
     Animator anim;
     [SerializeField] float mouseForce;
-    [SerializeField] float maxForce;
+    [SerializeField] float maxVelocity;
     float XVelocity;
     float YVelocity;
     // Start is called before the first frame update
@@ -24,11 +24,13 @@ public class Collisions : MonoBehaviour
     {
         // mouse drag velocity and negative direction into force
         XVelocity = -Input.GetAxis("Mouse X") * mouseForce;
-        YVelocity = -Input.GetAxis("Mouse Y") * mouseForce;
-        // force limit
-        if (XVelocity > maxForce/1.5) { XVelocity = maxForce/ 1.5f; }
-        if (XVelocity < -maxForce/ 1.5) { XVelocity = -maxForce/ 1.5f; }
-        if (YVelocity > maxForce) { YVelocity = maxForce; }
+        YVelocity = -Input.GetAxis("Mouse Y") * mouseForce * 1.75f;
+        if (YVelocity < 0) { YVelocity = 0; } // To prevent going down when you pull mouse back up
+
+        // velocity limit
+        if (playerBody.velocity.x > maxVelocity) { playerBody.velocity = new Vector2(maxVelocity, playerBody.velocity.y); }
+        if (playerBody.velocity.x < -maxVelocity) { playerBody.velocity = new Vector2(-maxVelocity, playerBody.velocity.y); }
+        if (playerBody.velocity.y > maxVelocity * 1.25f) { playerBody.velocity = new Vector2(playerBody.velocity.x, maxVelocity * 1.25f); }
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {

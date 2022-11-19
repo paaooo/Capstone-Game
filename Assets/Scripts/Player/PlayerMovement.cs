@@ -27,19 +27,20 @@ public class PlayerMovement : MonoBehaviour
     {
         // sets default animation to idle
         anim.SetBool("run", false);
-        if (onWall() && !isGrounded())
+        if (OnWall() && !IsGrounded())
         {
             playerBody.gravityScale = 0;
             playerBody.velocity = Vector2.zero;
-        } else
+        }
+        else
         {
             playerBody.gravityScale = gravity;
         }
-        keyInputs();
+        KeyInputs();
         inputCooldown += Time.deltaTime;
-        flipping();
+        Flipping();
     }
-    void keyInputs()
+    void KeyInputs()
     {
         // Vertical
         // Variable Height jump
@@ -48,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Jump();
         }
-        anim.SetBool("grounded", isGrounded());
+        anim.SetBool("grounded", IsGrounded());
 
         // Key up
         if ((Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.UpArrow)) && playerBody.velocity.y > 0)
@@ -59,68 +60,75 @@ public class PlayerMovement : MonoBehaviour
         // Horizontal
         if (inputCooldown > .15f)
         {
-            if (((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) && (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))) || Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
-            {
-                // To not change anything when both directions are pressed\
-                playerBody.velocity = new Vector2(0, playerBody.velocity.y);
-            }
-            else
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
             {
                 anim.SetBool("run", true);
-                playerBody.velocity = new Vector2(-speed, playerBody.velocity.y);
+                if (playerBody.velocity.x > -speed) // so player doesn't slow down if we're already going towards the direction
+                {
+                    playerBody.velocity = new Vector2(-speed, playerBody.velocity.y);
+                }
                 flip = "left";
             }
             else
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+            if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
             {
                 anim.SetBool("run", true);
-                playerBody.velocity = new Vector2(speed, playerBody.velocity.y);
+                if (playerBody.velocity.x < speed) // so player doesn't slow down if we're already going towards the direction
+                {
+                    playerBody.velocity = new Vector2(speed, playerBody.velocity.y);
+                }
                 flip = "right";
+            } else
+            if (((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) && (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))) || Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
+            {
+                // To not change anything when both directions are pressed
+                playerBody.velocity = new Vector2(0, playerBody.velocity.y);
             }
         }
 
     }
-    private void flipping()
+    private void Flipping()
     {
         // flipping sprite
         if (flip.Equals("right"))
         {
             transform.localScale = new Vector3(2, 2, 2);
-        } else
+        }
+        else
         {
             transform.localScale = new Vector3(-2, 2, 2);
         }
     }
     private void Jump()
     {
-        if (isGrounded())
+        if (IsGrounded())
         {
             playerBody.AddForce(new Vector2(0, jumpForce));
             anim.SetTrigger("jump");
-        } else if(onWall() && !isGrounded())
+        }
+        else if (OnWall() && !IsGrounded())
         {
             if (flip.Equals("left"))
             {
                 flip = "right";
-                playerBody.AddForce(new Vector2(jumpForce/2, jumpForce));
+                playerBody.AddForce(new Vector2(jumpForce / 2, jumpForce));
             }
             else if (flip.Equals("right"))
             {
                 flip = "left";
-                playerBody.AddForce(new Vector2(-jumpForce/2, jumpForce));
+                playerBody.AddForce(new Vector2(-jumpForce / 2, jumpForce));
             }
             anim.SetTrigger("jump");
             inputCooldown = 0;
 
         }
     }
-    private bool isGrounded()
+    private bool IsGrounded()
     {
         RaycastHit2D aboveGround = Physics2D.BoxCast(playerCollider.bounds.center, playerCollider.bounds.size, 0, Vector2.down, 0.1f, groundLayer);
         return aboveGround.collider != null;
     }
-    private bool onWall()
+    private bool OnWall()
     {
         RaycastHit2D besideWall = Physics2D.BoxCast(playerCollider.bounds.center, playerCollider.bounds.size, 0, new Vector2(transform.localScale.x, 0), 0.1f, wallLayer);
         return besideWall.collider != null;
