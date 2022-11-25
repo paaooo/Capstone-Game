@@ -9,6 +9,10 @@ public class Collisions : MonoBehaviour
     Animator anim;
     [SerializeField] float mouseForce;
     [SerializeField] float maxVelocity;
+    [SerializeField] AudioClip hitSound;
+    [SerializeField] AudioClip hitSound2;
+    [SerializeField] AudioClip hitSound3;
+    [SerializeField] float soundForce;
     float XVelocity;
     float YVelocity;
     // Start is called before the first frame update
@@ -38,7 +42,25 @@ public class Collisions : MonoBehaviour
         {
             // adding force to the player's rigidbody
             playerBody.AddForce(new Vector2(XVelocity, YVelocity));
+            if (XVelocity + YVelocity > soundForce || XVelocity + YVelocity < -soundForce)
+            {
+                float rand = (XVelocity + YVelocity) % 3;
+                SoundManager.instance.PlaySound(RandomHitSound());
+            }
             anim.SetTrigger("jump");
+        }
+        AudioClip RandomHitSound()
+        {
+            int rand = Mathf.FloorToInt(Random.Range(0, 3));
+            if(rand == 0)
+            {
+                return hitSound;
+            }
+            if(rand == 1)
+            {
+                return hitSound2;
+            }
+                return hitSound3;
         }
         if (collision.gameObject.CompareTag("Player"))
         {

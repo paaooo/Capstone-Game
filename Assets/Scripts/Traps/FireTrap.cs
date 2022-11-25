@@ -7,6 +7,7 @@ public class FireTrap : MonoBehaviour
     [Header("FireTrap Timers")]
     [SerializeField] float activationDelay;
     [SerializeField] float activationTime;
+    [SerializeField] AudioClip activeSound;
     Animator anim;
     GameObject player;
 
@@ -51,6 +52,7 @@ public class FireTrap : MonoBehaviour
 
         // Activate the firetrap
         yield return new WaitForSeconds(activationDelay);
+        SoundManager.instance.PlaySound(activeSound);
         active = true;
         anim.SetBool("activated", active);
 

@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] LayerMask wallLayer; // specification of wall using layers
     [SerializeField] float speed;
     [SerializeField] float jumpForce;
+    [SerializeField] AudioClip jumpSound;
     string flip = "right"; // to determine which way the sprite is facing
     float gravity; // default value of gravity
     float inputCooldown = 0f; // to disable inputs for a millisecond after walljumping
@@ -105,6 +106,7 @@ public class PlayerMovement : MonoBehaviour
         {
             playerBody.AddForce(new Vector2(0, jumpForce));
             anim.SetTrigger("jump");
+            SoundManager.instance.PlaySound(jumpSound);
         }
         else if (OnWall() && !IsGrounded())
         {
@@ -120,7 +122,7 @@ public class PlayerMovement : MonoBehaviour
             }
             anim.SetTrigger("jump");
             inputCooldown = 0;
-
+            SoundManager.instance.PlaySound(jumpSound);
         }
     }
     private bool IsGrounded()
