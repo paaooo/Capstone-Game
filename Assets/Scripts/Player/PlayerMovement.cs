@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    UIManager ui;
     Rigidbody2D playerBody;
     Animator anim;
     CapsuleCollider2D playerCollider;
@@ -19,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         // Setting the player's attributes into accessible variables
+        ui = FindObjectOfType<UIManager>();
         playerBody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         playerCollider = GetComponent<CapsuleCollider2D>();
@@ -43,47 +45,51 @@ public class PlayerMovement : MonoBehaviour
     }
     void KeyInputs()
     {
-        // Vertical
-        // Variable Height jump
-        // Key down
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)))
+        if (!ui.winState && !ui.pauseState)
         {
-            Jump();
-        }
-        anim.SetBool("grounded", IsGrounded());
-
-        // Key up
-        if ((Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.UpArrow)) && playerBody.velocity.y > 0)
-        {
-            playerBody.velocity = new Vector2(playerBody.velocity.x, 0);
-        }
-
-        // Horizontal
-        if (inputCooldown > .15f)
-        {
-            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+            // Vertical
+            // Variable Height jump
+            // Key down
+            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)))
             {
-                anim.SetBool("run", true);
-                if (playerBody.velocity.x > -speed) // so player doesn't slow down if we're already going towards the direction
-                {
-                    playerBody.velocity = new Vector2(-speed, playerBody.velocity.y);
-                }
-                flip = "left";
+                Jump();
             }
-            else
-            if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+            anim.SetBool("grounded", IsGrounded());
+
+            // Key up
+            if ((Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.UpArrow)) && playerBody.velocity.y > 0)
             {
-                anim.SetBool("run", true);
-                if (playerBody.velocity.x < speed) // so player doesn't slow down if we're already going towards the direction
+                playerBody.velocity = new Vector2(playerBody.velocity.x, 0);
+            }
+
+            // Horizontal
+            if (inputCooldown > .15f)
+            {
+                if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
                 {
-                    playerBody.velocity = new Vector2(speed, playerBody.velocity.y);
+                    anim.SetBool("run", true);
+                    if (playerBody.velocity.x > -speed) // so player doesn't slow down if we're already going towards the direction
+                    {
+                        playerBody.velocity = new Vector2(-speed, playerBody.velocity.y);
+                    }
+                    flip = "left";
                 }
-                flip = "right";
-            } else
-            if (((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) && (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))) || Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
-            {
-                // To not change anything when both directions are pressed
-                playerBody.velocity = new Vector2(0, playerBody.velocity.y);
+                else
+                if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+                {
+                    anim.SetBool("run", true);
+                    if (playerBody.velocity.x < speed) // so player doesn't slow down if we're already going towards the direction
+                    {
+                        playerBody.velocity = new Vector2(speed, playerBody.velocity.y);
+                    }
+                    flip = "right";
+                }
+                else
+                if (((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) && (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))) || Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
+                {
+                    // To not change anything when both directions are pressed
+                    playerBody.velocity = new Vector2(0, playerBody.velocity.y);
+                }
             }
         }
 

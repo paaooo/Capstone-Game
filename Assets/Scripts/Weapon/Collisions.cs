@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Collisions : MonoBehaviour
 {
+    UIManager ui;
     GameObject player;
     Rigidbody2D playerBody;
     Animator anim;
@@ -18,6 +19,7 @@ public class Collisions : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        ui = FindObjectOfType<UIManager>();
         player = GameObject.FindGameObjectWithTag("Player");
         playerBody = player.GetComponent<Rigidbody2D>();
         anim = player.GetComponent<Animator>();
@@ -38,17 +40,20 @@ public class Collisions : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Wall"))
+        if (!ui.pauseState && !ui.winState)
         {
-            // adding force to the player's rigidbody
-            playerBody.AddForce(new Vector2(XVelocity, YVelocity));
-            if (XVelocity + YVelocity > soundForce || XVelocity + YVelocity < -soundForce)
+            if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Wall"))
             {
-                float rand = (XVelocity + YVelocity) % 3;
-                SoundManager.instance.PlaySound(RandomHitSound());
+                // adding force to the player's rigidbody
+                playerBody.AddForce(new Vector2(XVelocity, YVelocity));
+                if (Mathf.Abs(XVelocity) + Mathf.Abs(YVelocity) > soundForce)
+                {
+                    SoundManager.instance.PlaySound(RandomHitSound());
+                }
+                anim.SetTrigger("jump");
             }
-            anim.SetTrigger("jump");
         }
+
         AudioClip RandomHitSound()
         {
             int rand = Mathf.FloorToInt(Random.Range(0, 3));
