@@ -60,7 +60,6 @@ public class UIManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.25f);
         Application.Quit();
-        UnityEditor.EditorApplication.isPlaying = false;
     }
     public void Resume()
     {

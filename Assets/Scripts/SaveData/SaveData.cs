@@ -23,11 +23,11 @@ public class SaveData : MonoBehaviour
     {
         string json = JsonUtility.ToJson(position);
 
-        using StreamWriter writer = new StreamWriter(unityPath);
+        using StreamWriter writer = new StreamWriter(persistentPath);
         writer.Write(json);
     }
     public void LoadPosition() {
-        using StreamReader reader = new StreamReader(unityPath);
+        using StreamReader reader = new StreamReader(persistentPath);
         string json = reader.ReadToEnd();
 
         Vector3 position = JsonUtility.FromJson<Vector3>(json);
@@ -46,7 +46,7 @@ public class SaveData : MonoBehaviour
     }
     void SetPaths()
     {
-        unityPath = Application.dataPath + Path.AltDirectorySeparatorChar + "SaveData.json";
-        persistentPath = Application.persistentDataPath + Path.AltDirectorySeparatorChar + "SaveData.json";
+        unityPath = Application.dataPath + Path.AltDirectorySeparatorChar + "SaveData.json"; // for unity editor
+        persistentPath = Application.persistentDataPath + Path.AltDirectorySeparatorChar + "SaveData.json"; // for application
     }
 }
