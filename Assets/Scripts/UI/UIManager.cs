@@ -32,6 +32,7 @@ public class UIManager : MonoBehaviour
     public void Menu()
     {
         SoundManager.instance.PlaySound(clickSound);
+        SaveData.instance.SavePosition(player.transform.position);
         StartCoroutine(MenuDelay());
     }
     IEnumerator MenuDelay()
@@ -44,12 +45,15 @@ public class UIManager : MonoBehaviour
     {
         SoundManager.instance.PlaySound(clickSound);
         player.transform.position = Vector3.zero;
+        SaveData.instance.SavePosition(player.transform.position);
         winScreen.SetActive(false);
+        pauseScreen.SetActive(false);
     }
 
     public void Exit()
     {
         SoundManager.instance.PlaySound(clickSound);
+        print(player.transform.position);
         StartCoroutine(ExitDelay());
     }
     IEnumerator ExitDelay()
